@@ -1,14 +1,15 @@
 import './App.css';
-import appLogo from './assets/Aria.jpg'
+import {Routes, Route} from 'react-router-dom'
+import Navigation from './components/navigationComponent/nav.js'
+import Home from './components/homeComponent/home.js'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Welcome to </h1>
-        <img src={appLogo} alt='Aria'/>
-      </header>
-    </div>
+    <Routes>
+      <Route path = '/' elements = {<Navigation />}>
+        <Route index element = {<Home />}/>
+      </Route>
+    </Routes>
   );
 }
 
