@@ -2,9 +2,10 @@ import './about.scss'
 
 const About = () => {
   return (
-    <h1>
+    <div className='about-container'>
       About...
-    </h1>
+    </div>
+    
   )
 }
 export default About
