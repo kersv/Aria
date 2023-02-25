@@ -1,0 +1,43 @@
+.nav{
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  
+  .nav-left{
+    height: 100%;
+    display: flex;
+    width: 15%;    
+    justify-content: space-between;
+    align-items: center;
+  
+    .logo-container{
+      height: 100%;
+      width: 70px;
+      padding: 10px;
+
+      .nav-logo{
+        height: 100%;
+        width: 70px;
+        
+      }
+    }
+    .nav-link{
+      padding: 10px 15px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 17px;
+      color: black;
+      cursor: pointer;
+    }
+  }
+  .nav-right{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    margin-right: 10px;
+  }
+
+}

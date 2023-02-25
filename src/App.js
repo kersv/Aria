@@ -1,13 +1,17 @@
 import './App.css';
 import {Routes, Route} from 'react-router-dom'
-import Navigation from './components/navigationComponent/nav.js'
-import Home from './components/homeComponent/home.js'
+import Navigation from './routes/navigation/nav.js'
+import Home from './routes/home/home.js'
+import About from './routes/about/about';
 
-function App() {
+
+
+const  App = () => {
   return (
     <Routes>
-      <Route path = '/' elements = {<Navigation />}>
-        <Route index element = {<Home />}/>
+      <Route path='/' element={<Navigation/>}>
+        <Route index element={<Home/>}/>
+        <Route path='about' element={<About/>}/>
       </Route>
     </Routes>
   );
