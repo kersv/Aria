@@ -1,0 +1,30 @@
+.logo-container {
+    width: 350px;
+    // height: 200px;
+    margin-top: 30px;
+    // outline: 1px solid black;
+
+    .logo-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .line {
+            width: 100px;
+            height: 2px;
+            border: 1px solid #519E8A;
+            background-color: #519E8A;
+            margin: 3%;
+        }
+        .x {
+            color: #519E8A;
+            font-weight: 1000;
+            font-size: 45px;
+        }
+    }
+
+    .logo-bottom {
+        text-align: center;
+        font-size: 120px;
+        font-weight: 100;
+    }
+}
