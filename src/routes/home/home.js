@@ -1,5 +1,4 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
 import AriaLogo from '../../assets/Aria.jpg'
 import './home.scss'
 
@@ -11,7 +10,12 @@ const Home = () => {
                 <h1>Welcome to Aria</h1>
                 <img src={AriaLogo} alt='Aria Logo'/>
             </div>
-            <Outlet/>
+            
+            <div className='home-container'>
+                {/* <h1>Features</h1> */}
+                <img className='img-feature' src='https://ocl-steinberg-live.steinberg.net/_storage/asset/178442/storage/PNG_large_2000px/178442-large.png' alt='Aria Features'/>
+            </div>
+            
         </div>
     )
 }
