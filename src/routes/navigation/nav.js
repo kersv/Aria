@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react'
 import {Link, Outlet} from "react-router-dom"
-import AriaLogo from "../../assets/Aria.jpg"
 import './nav.scss'
 import Button from '../../components/button/button'
 
 
+
 const Navigation = () => {
+    
     return (
         <Fragment>
             <div className = "nav">
@@ -21,7 +22,9 @@ const Navigation = () => {
                     <Link className = "nav-link" to = "/about"> About </Link>
                 </div>
                 <div className='nav-right'>
-                    <Button>Login/Signup </Button>
+                    <Link to='/signin'>
+                        <Button>Login/Signup </Button>
+                    </Link>
                 </div>
             </div>
             <Outlet />

@@ -1,5 +1,4 @@
 import React from 'react'
-import AriaLogo from '../../assets/Aria.jpg'
 import './home.scss'
 import Logo from '../../components/logo/logo.js'
 
