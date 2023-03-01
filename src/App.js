@@ -4,7 +4,7 @@ import Navigation from './routes/navigation/nav.js'
 import Home from './routes/home/home.js'
 import About from './routes/about/about';
 import Footer from './components/footer/footer.js'
-import SignIn from './routes/sign-in/sign-in';
+import Auth from './routes/auth/auth';
 
 
 
@@ -15,7 +15,7 @@ const  App = () => {
         <Route path='/' element={<Navigation/>}>
           <Route index element={<Home/>}/>
           <Route path='about' element={<About/>}/>
-          <Route path='signin' element={<SignIn/>}/>
+          <Route path='auth' element={<Auth/>}/>
         </Route>
       </Routes>
       <Footer />

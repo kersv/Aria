@@ -70,9 +70,15 @@
   }
   .nav-right{
     height: 100%;
+    width: 20%;
     display: flex;
+    justify-content: end;
     align-items: center;
     margin-right: 10px;
+    
+    .login-signup-nav{
+      text-decoration: none;
+    }
   }
 
 }
