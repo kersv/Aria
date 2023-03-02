@@ -75,6 +75,44 @@
     justify-content: end;
     align-items: center;
     margin-right: 10px;
+
+    .img-dropdown {
+      position: relative;
+
+      .profile-img {
+        width: 3em;
+        height: 3em;
+        border-radius: 50%;
+      }
+      
+      .dropdown {
+        list-style: none;
+        position: absolute;
+        right: 0;
+        background-color: white;
+        border-radius: 5%;
+        padding: 10%;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      }
+
+    }
+
+    .default-pro-pic {
+      width: 3em;
+      height: 3em;
+      border-radius: 50%;
+      background-color: #519E8A;
+    }
+
+    .users-name {
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+
+    .signout {
+      padding-left: 1em;
+      padding-right: 1em;
+    }
     
     .login-signup-nav{
       text-decoration: none;

@@ -1,15 +1,25 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import {Link, Outlet} from "react-router-dom"
 import { UserContext } from '../../contexts/user.context'
 import { signOutUser } from '../../utils/firebase/firebase.utils'
 import './nav.scss'
 import Button from '../../components/button/button'
 
-
+import profile from '../../assets/default-profile.png'
 
 const Navigation = () => {
     const {currentUser} = useContext(UserContext)
+    console.log(currentUser)
 
+    const [state, setState] = useState(false);
+
+    const showDropDown = () => {
+        setState(true)
+    }
+
+    const hideDropDown = () => {
+        setState(false)
+    }
 
     return (
         <Fragment>
@@ -28,9 +38,31 @@ const Navigation = () => {
                 <div className='nav-right'>
                     {currentUser ? (
                         <Fragment>
-                            <img src={`${currentUser.photoURL}`} alt='profile-pic'></img>
-                            <span>{currentUser.displayName}</span>
-                            <span onClick={signOutUser}>Signout</span>
+                            <span className = "users-name">{currentUser.displayName}</span>
+                            {/* <span onClick={signOutUser} className = "signout">Signout</span> */}
+                            {currentUser.photoURL ? 
+                                <div className = "img-dropdown" onMouseEnter={showDropDown} onMouseLeave={hideDropDown} > 
+                                    <img src={`${currentUser.photoURL}`} alt='profile-pic' className = "profile-img"/>
+                                    {
+                                        state ? 
+                                        (<ul className = "dropdown" onMouseEnter={showDropDown}>
+                                            <li className = "dropdown-menu"><span onClick={signOutUser} className = "signout">Signout</span></li>
+                                        </ul>) : null
+                                    }
+                                </div>
+
+
+                            : 
+                            <div className = "img-dropdown" onMouseEnter={showDropDown} onMouseLeave={hideDropDown} > 
+                                <img src={profile} alt="default profile image" className = "default-pro-pic"/>
+                                    {
+                                        state ? 
+                                        (<ul className = "dropdown" onMouseEnter={showDropDown}>
+                                            <li className = "dropdown-menu"><span onClick={signOutUser} className = "signout">Signout</span></li>
+                                        </ul>) : null
+                                    }
+                                </div>
+                            }
                         </Fragment>
                     ) : (
                         <Link className='login-signup-nav' to='/auth'>
