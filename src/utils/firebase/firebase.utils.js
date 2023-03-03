@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import {getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged} from "firebase/auth"
-import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
+import {getFirestore, doc, getDoc, setDoc, collection, query, getDocs} from 'firebase/firestore'
 
 
 const firebaseConfig = {
@@ -31,22 +31,20 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
 
   const userSnapshot = await getDoc(userDocRef)
 
-  let showName = additionalInfo.displayName
-  // if(!userSnapshot.exists()){
-  //   const {displayName, email} = userAuth
-  //   const createdAt = new Date()
-  //   try {
-  //     await setDoc(userDocRef, {
-  //       displayName: showName,
-  //       email, 
-  //       createdAt,
-  //       ...additionalInfo
-  //     })
-  //   } catch(error){
-  //   } 
-  // }
-
-  console.log('user after sign up', userAuth)
+  if(!userSnapshot.exists()){
+    const {displayName, email} = userAuth
+    const createdAt = new Date()
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email, 
+        createdAt,
+        ...additionalInfo
+      })
+    } catch(error){
+      console.log("error creating the user", error.message);
+    } 
+  }
   return userDocRef
 }
 
@@ -68,3 +66,30 @@ export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
 
 
+// retrieving data from firestore
+export const getDisplayName = async (uid) => {
+  console.log(uid)
+  const collectionRef = collection(db, 'users')
+  const q = query(collectionRef)
+  
+  const querySnapshot = await getDocs(q)
+  
+  // console.log(querySnapshot.docs[0].id)
+  // console.log(querySnapshot.docs[1].id)
+  // console.log(querySnapshot.docs[2].id)
+  const userMap = querySnapshot.docs.filter( (docSnapshot) => docSnapshot.id === uid)
+  // const userMap = querySnapshot.docs.filter((docSnapshot) => {
+    
+  //   // console.log(docSnapshot.data())
+  //   // console.log(docSnapshot.id)
+  //   if(uid === docSnapshot.id){
+  //     console.log(docSnapshot)
+  //     const {displayName} = docSnapshot.data()
+  //     console.log(displayName)
+  //     return displayName
+  //   }
+  // })
+  console.log(userMap)
+
+  return userMap
+}

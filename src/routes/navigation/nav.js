@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import {Link, Outlet} from "react-router-dom"
 import { UserContext } from '../../contexts/user.context'
 import { signOutUser } from '../../utils/firebase/firebase.utils'
@@ -8,15 +8,24 @@ import Button from '../../components/button/button'
 import profile from '../../assets/default-profile.png'
 
 const Navigation = () => {
-    const {currentUser} = useContext(UserContext)
-    console.log(currentUser)
-
+    const {currentUser, getName, displayName} = useContext(UserContext)
     const [state, setState] = useState(false);
+    
+
+    useEffect(() => {
+        if(currentUser){
+            getName(currentUser.uid)
+            
+        }
+    }, currentUser)
+
+    
+    console.log(displayName)
+    
 
     const showDropDown = () => {
         setState(true)
     }
-
     const hideDropDown = () => {
         setState(false)
     }
@@ -38,7 +47,7 @@ const Navigation = () => {
                 <div className='nav-right'>
                     {currentUser ? (
                         <Fragment>
-                            <span className = "users-name">{currentUser.displayName}</span>
+                            <span className = "users-name">{displayName}</span>
                             {/* <span onClick={signOutUser} className = "signout">Signout</span> */}
                             {currentUser.photoURL ? 
                                 <div className = "img-dropdown" onMouseEnter={showDropDown} onMouseLeave={hideDropDown} > 
