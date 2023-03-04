@@ -74,21 +74,8 @@ export const getDisplayName = async (uid) => {
   
   const querySnapshot = await getDocs(q)
   
-  // console.log(querySnapshot.docs[0].id)
-  // console.log(querySnapshot.docs[1].id)
-  // console.log(querySnapshot.docs[2].id)
   const userMap = querySnapshot.docs.filter( (docSnapshot) => docSnapshot.id === uid)
-  // const userMap = querySnapshot.docs.filter((docSnapshot) => {
-    
-  //   // console.log(docSnapshot.data())
-  //   // console.log(docSnapshot.id)
-  //   if(uid === docSnapshot.id){
-  //     console.log(docSnapshot)
-  //     const {displayName} = docSnapshot.data()
-  //     console.log(displayName)
-  //     return displayName
-  //   }
-  // })
+  
   console.log(userMap)
 
   return userMap

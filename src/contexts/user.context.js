@@ -5,13 +5,13 @@ export const UserContext = createContext({
   setCurrentUser: () => {},
   currentUser: null,
   setDisplayName: () => {},
-  displayName: null,
+  displayName: '',
   getName: () => {}
 });
 
 export const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [displayName, setDisplayName] = useState(null);
+  const [displayName, setDisplayName] = useState('');
   
 
   
