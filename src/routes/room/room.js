@@ -1,12 +1,41 @@
 import React from 'react'
 import './room.scss'
 import { UserContext } from '../../contexts/user.context'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
+import FormInput from '../../components/form-input/form-input'
+
+const defaultRoomFields = { 
+    roomkey: ''
+}
 
 
 
 const Room = () => {
     const {currentUser} = useContext(UserContext)
+
+    const [roomFields, setRoomFields] = useState(defaultRoomFields)
+    const {roomkey} = roomFields
+
+    const handleChange = (event) => {
+        const {name, value} = event.target
+        setRoomFields({...roomFields, [name]:value })
+    }
+
+    const resetRoomFields = () => {
+        setRoomFields(defaultRoomFields)
+      }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        
+        try{
+          
+          resetRoomFields()
+        }
+        catch(error) {
+          console.log(error)
+        }
+    }
 
     return (
         <div className = "room-container">
@@ -14,9 +43,11 @@ const Room = () => {
                 <div className='room'>
             
                     <div className='room-left'>
-                        <button className = "create-room">Create Room</button>
-                        <input />
-                        <button className = "join-room">Join Room</button>
+                        <button className = "create-room" onClick={() => console.log('NEW PAGE W NEW ROOMKEY')}>Create Room</button>
+                        <form onSubmit={handleSubmit}>
+                            <FormInput className='room-input' label='Room Key' type='text' onChange={handleChange} required name='roomkey' value={roomkey}/>
+                            <button className = "join-room" type='submit'>Join Room</button>
+                        </form>
                     </div>
                     
                     <div className='room-right'>

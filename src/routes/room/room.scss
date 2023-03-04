@@ -1,3 +1,12 @@
+$sub-color: grey;
+$main-color: black;
+
+@mixin shrinkLabel {
+  top: -14px;
+  font-size: 12px;
+  color: $main-color;
+}
+
 .room-container {
     .room{
         display: flex;
@@ -10,45 +19,73 @@
         .room-left{
           flex:3;
           height: 70%;
-          outline: 1px solid green;
+          
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
           
-        .create-room {
-            width: 17em;
-            height: 50px; 
-            letter-spacing: 0.5px;
-            line-height: 50px;
-            padding: 0 35px 0 35px;
-            font-size: 15px;
-            background-color: #519E8A;
-            color: white;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            margin: 1em;
-        }
 
-        .join-room {
-            width: 17em;
-            height: 50px; 
-            letter-spacing: 0.5px;
-            line-height: 50px;
-            padding: 0 35px 0 35px;
-            font-size: 15px;
-            background-color: #357ae8;
-            color: white;
-            text-transform: uppercase;
+          
+          .create-room {
+              width: 17em;
+              height: 50px; 
+              letter-spacing: 0.5px;
+              line-height: 50px;
+              padding: 0 35px 0 35px;
+              font-size: 15px;
+              background-color: #519E8A;
+              color: white;
+              text-transform: uppercase;
+              border: none;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              margin-bottom: 60px;
+              
+          }
+
+          .room-input{
+            background: none;
+            background-color: #DCDCDC;
+            color: $sub-color;
+            font-size: 18px;
+            padding: 10px 10px 10px 5px;
+            display: block;
+            width: 94%;
             border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            margin: 1em;
-        }
+            border-radius: 0;
+            border-bottom: 1px solid $sub-color;
+            margin: 15px 0;
+
+            &:focus {
+              outline: none;
+            }
+
+            &:focus ~ .room-input-label {
+              @include shrinkLabel();
+            }
+          }
+
+          
+
+          .join-room {
+              width: 17em;
+              height: 50px; 
+              letter-spacing: 0.5px;
+              line-height: 50px;
+              padding: 0 35px 0 35px;
+              font-size: 15px;
+              background-color: #357ae8;
+              color: white;
+              text-transform: uppercase;
+              border: none;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              margin-top: -20px;
+              
+          }
           
       
         }
