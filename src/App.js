@@ -5,6 +5,7 @@ import Home from './routes/home/home.js'
 import About from './routes/about/about';
 import Footer from './components/footer/footer.js'
 import Auth from './routes/auth/auth';
+import Room from './routes/room/room'
 
 
 
@@ -16,6 +17,7 @@ const  App = () => {
           <Route index element={<Home/>}/>
           <Route path='about' element={<About/>}/>
           <Route path='auth' element={<Auth/>}/>
+          <Route path='room' element={<Room/>}/>
         </Route>
       </Routes>
       <Footer />

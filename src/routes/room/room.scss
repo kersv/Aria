@@ -1,0 +1,78 @@
+.room-container {
+    .room{
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        background-color: #DCDCDC;
+        justify-content: center;
+        align-items: center;
+      
+        .room-left{
+          flex:3;
+          height: 70%;
+          outline: 1px solid green;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          
+        .create-room {
+            width: 17em;
+            height: 50px; 
+            letter-spacing: 0.5px;
+            line-height: 50px;
+            padding: 0 35px 0 35px;
+            font-size: 15px;
+            background-color: #519E8A;
+            color: white;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            margin: 1em;
+        }
+
+        .join-room {
+            width: 17em;
+            height: 50px; 
+            letter-spacing: 0.5px;
+            line-height: 50px;
+            padding: 0 35px 0 35px;
+            font-size: 15px;
+            background-color: #357ae8;
+            color: white;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            margin: 1em;
+        }
+          
+      
+        }
+        .room-right{
+          height: 70%;
+          // outline: 1px solid green;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex:4;
+          .img-feature{
+            width: 85%;
+            
+            object-fit: contain;
+            box-shadow: rgba(0, 0, 0, 0.9) 0px 7px 29px 0px;
+          }
+        }
+      }
+
+    .room-signup {
+        font-size: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+}
