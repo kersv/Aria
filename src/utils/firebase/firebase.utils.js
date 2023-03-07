@@ -68,15 +68,12 @@ export const onAuthStateChangedListener = (callback) =>
 
 // retrieving data from firestore
 export const getDisplayName = async (uid) => {
-  console.log(uid)
   const collectionRef = collection(db, 'users')
   const q = query(collectionRef)
   
   const querySnapshot = await getDocs(q)
   
   const userMap = querySnapshot.docs.filter( (docSnapshot) => docSnapshot.id === uid)
-  
-  console.log(userMap)
 
   return userMap
 }

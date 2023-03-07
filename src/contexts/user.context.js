@@ -27,9 +27,7 @@ export const UserProvider = ({ children }) => {
   
   const getName = async (uid) => {
     const name = await getDisplayName(uid)
-    console.log(name)
     const {displayName} = (name[0].data())
-    console.log(displayName)
     setDisplayName(displayName)
   }
 
