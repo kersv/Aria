@@ -17,11 +17,7 @@ const Navigation = () => {
             getName(currentUser.uid)
             
         }
-    }, currentUser)
-
-    
-    console.log(displayName)
-    
+    }, currentUser)    
 
     const showDropDown = () => {
         setState(true)
