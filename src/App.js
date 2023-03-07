@@ -6,6 +6,7 @@ import About from './routes/about/about';
 import Footer from './components/footer/footer.js'
 import Auth from './routes/auth/auth';
 import Room from './routes/room/room'
+import MusicRoom from './routes/music-room/music-room';
 
 
 
@@ -18,6 +19,7 @@ const  App = () => {
           <Route path='about' element={<About/>}/>
           <Route path='auth' element={<Auth/>}/>
           <Route path='room' element={<Room/>}/>
+          <Route path='music/:id' element={<MusicRoom/>}/>
         </Route>
       </Routes>
       <Footer />

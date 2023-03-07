@@ -25,7 +25,7 @@ const SignInForm = () => {
     setFormFields({...formFields, [name]:value })
   }
 
-  const resetFormFiels = () => {
+  const resetFormFields = () => {
     setFormFields(defaultFormFields)
   }
 
@@ -35,7 +35,7 @@ const SignInForm = () => {
     try{
       const response = await signInAuthUserWithEmailAndPassword(email, password)
       // console.log(response)
-      resetFormFiels()
+      resetFormFields()
     }
     catch(error) {
       switch(error.code){
