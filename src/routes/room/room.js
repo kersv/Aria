@@ -41,32 +41,35 @@ const Room = () => {
         setRoomFields(defaultRoomFields)
       }
 
+    let navigate = useNavigate()
+
     const handleSubmit = async (event) => {
         event.preventDefault()
+        
         try{
           socket.emit("room-key", roomkey)
-          socket.emit('join-room', roomkey)
+          
+          setRoomKey(roomkey)
+          navigate(`/music/${roomkey}`)
           resetRoomFields()
         }
         catch(error) {
           console.log(error)
         }
     }
-    let navigate = useNavigate()
 
     const createRoom = () => {
         let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        for ( let i = 0; i < 6; i++ ) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
+        // const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        // const charactersLength = characters.length;
+        // for ( let i = 0; i < 6; i++ ) {
+        //     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        // }
+        result = socket.id
         setRoomKey(result)
 
         navigate(`/music/${result}`)
-        return (
-            console.log(roomKey)
-        )
+        
     }
 
     return (
