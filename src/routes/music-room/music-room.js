@@ -5,17 +5,20 @@ import './music-room.scss'
 import { io } from 'socket.io-client'
 
 
-
 const socket = io('http://localhost:8000')
 
 
 const defaultMessageFields = {
   message: '',
-  
+}
+const defaultYTFields = {
+  yt_link: '',
 }
 
 const MusicRoom = () => {
   const [messageFields, setMessageFields] = useState(defaultMessageFields)
+  const [ytFields, setYtFields] = useState(defaultYTFields)
+  const {yt_link} = ytFields
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
@@ -78,12 +81,24 @@ const MusicRoom = () => {
     }
   }
 
+  const ytChange = (event) => {
+    const {name, value} = event.target
+    setYtFields({[name]: value})
+  }
+
+  const ytSubmit = (event) => {
+    event.preventDefault()
+    console.log(yt_link)
+  }
+
   return (
     <div className='music-room-container'>
       <div className='room-key'>Room Key: {roomKey}</div>
       <div className='content-wrapper'>
         <div className='music-queue'>MUSIC QUEUE</div>
-        <div className='video-player'>VIDEO PLAYER</div>
+        <div className='video-player'>VIDEO PLAYER
+        <iframe></iframe>       
+        </div>
         <div className='message-container'>
           <div className='chatroom'>Chat Room</div>
           <div className='chatroom-container' ref={chatRef}>{chatroom.map((item, index) => (
@@ -92,13 +107,19 @@ const MusicRoom = () => {
               <span className = "user-message">{item[0]}</span>
             </div>
           ))}</div>
-          <form onSubmit={handleSubmit} className='message-form'>
-            <input type='text' className='message-input' required onChange={handleChange} name='message' value={message}/>
-            <button type='submit' className='send-button'>Send</button>
-          </form>
+            <form onSubmit={handleSubmit} className='message-form'>
+              <input type='text' className='message-input' required onChange={handleChange} name='message' value={message}/>
+              <button type='submit' className='send-button'>Send</button>
+            </form>
         </div>
 
       </div>
+          <div>
+            <form onSubmit={ytSubmit} className='message-form'>
+              <input type='text' className='yt-input' required onChange={ytChange} name='yt_link' value={yt_link}/>
+              <button type='submit' className='send-button'>Send</button>
+            </form>
+          </div>
 
     </div>
   )
