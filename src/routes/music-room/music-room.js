@@ -18,7 +18,7 @@ const MusicRoom = () => {
   const [messageFields, setMessageFields] = useState(defaultMessageFields)
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
-  const [userroom, setUserRoom] = useState([])
+  // const [userroom, setUserRoom] = useState([])
   const {roomKey} = useContext(RoomKeyContext)
   const {currentUser, getName, displayName} = useContext(UserContext)
 
@@ -72,7 +72,7 @@ const MusicRoom = () => {
 
   return (
     <div className='message-container'>
-      <div>Random users</div>
+      <div className='room-key'>Room Key: {roomKey}</div>
       <div className='chatroom-container' ref={chatRef}>{chatroom.map((item, index) => (
         <div key={index} className = "user-info-message">
           <span className = "user">{item[1]}: </span>
