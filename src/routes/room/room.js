@@ -50,7 +50,7 @@ const Room = () => {
           socket.emit("room-key", roomkey)
           
           setRoomKey(roomkey)
-          navigate(`/music/${roomkey}`)
+          navigate(`/room/${roomkey}`)
           resetRoomFields()
         }
         catch(error) {
@@ -59,7 +59,7 @@ const Room = () => {
     }
 
     const createRoom = () => {
-        let result = '';
+        let result
         // const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         // const charactersLength = characters.length;
         // for ( let i = 0; i < 6; i++ ) {
@@ -68,7 +68,7 @@ const Room = () => {
         result = socket.id
         setRoomKey(result)
 
-        navigate(`/music/${result}`)
+        navigate(`/room/${result}`)
         
     }
 

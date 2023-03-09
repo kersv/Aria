@@ -19,7 +19,7 @@ const MusicRoom = () => {
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
-  const {roomKey} = useContext(RoomKeyContext)
+  const {roomKey, setRoomKey} = useContext(RoomKeyContext)
   const {currentUser, getName, displayName} = useContext(UserContext)
 
   // this reference is for when the user types a new message and the chatbox is full, itll automatically show you the bottom
@@ -39,6 +39,14 @@ const MusicRoom = () => {
   useEffect(() => {
     socket.emit('join-room', roomKey)
   }, [roomKey])
+  
+  useEffect(() => {
+    const currentURL = window.location.pathname
+    const parts = currentURL.split('/')
+    const roomCode = parts[parts.length-1]
+    console.log(roomCode)
+    setRoomKey(roomCode)
+  }, [setRoomKey])
 
   useEffect(() => {
     chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -71,18 +79,27 @@ const MusicRoom = () => {
   }
 
   return (
-    <div className='message-container'>
+    <div className='music-room-container'>
       <div className='room-key'>Room Key: {roomKey}</div>
-      <div className='chatroom-container' ref={chatRef}>{chatroom.map((item, index) => (
-        <div key={index} className = "user-info-message">
-          <span className = "user">{item[1]}: </span>
-          <span className = "user-message">{item[0]}</span>
+      <div className='content-wrapper'>
+        <div className='music-queue'>MUSIC QUEUE</div>
+        <div className='video-player'>VIDEO PLAYER</div>
+        <div className='message-container'>
+          <div className='chatroom'>Chat Room</div>
+          <div className='chatroom-container' ref={chatRef}>{chatroom.map((item, index) => (
+            <div key={index} className = "user-info-message">
+              <span className = "user">{item[1]}: </span>
+              <span className = "user-message">{item[0]}</span>
+            </div>
+          ))}</div>
+          <form onSubmit={handleSubmit} className='message-form'>
+            <input type='text' className='message-input' required onChange={handleChange} name='message' value={message}/>
+            <button type='submit' className='send-button'>Send</button>
+          </form>
         </div>
-      ))}</div>
-      <form onSubmit={handleSubmit} className='message-form'>
-        <input type='text' className='message-input' required onChange={handleChange} name='message' value={message}/>
-        <button type='submit' className='send-button'>Send</button>
-      </form>
+
+      </div>
+
     </div>
   )
 }
