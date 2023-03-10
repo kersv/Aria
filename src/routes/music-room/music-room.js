@@ -19,6 +19,7 @@ const MusicRoom = () => {
   const [messageFields, setMessageFields] = useState(defaultMessageFields)
   const [ytFields, setYtFields] = useState(defaultYTFields)
   const {yt_link} = ytFields
+  const [ytPlayer, setYtPlayer] = useState('')
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
@@ -32,6 +33,17 @@ const MusicRoom = () => {
     await setChatRoom([...chatroom,  [inComingMessage, inComingName]])
     await console.log("this is the chatroom", chatroom)
   })
+
+  socket.on('recieve-yt', (incomingYT) => {
+    setYtPlayer(incomingYT)
+  })
+
+  useEffect(() => {
+    console.log(ytPlayer)
+    setYtPlayer(ytPlayer)
+    
+  }, [ytPlayer])
+
 
   useEffect(() => {
     if(currentUser){
@@ -47,7 +59,6 @@ const MusicRoom = () => {
     const currentURL = window.location.pathname
     const parts = currentURL.split('/')
     const roomCode = parts[parts.length-1]
-    console.log(roomCode)
     setRoomKey(roomCode)
   }, [setRoomKey])
 
@@ -58,6 +69,10 @@ const MusicRoom = () => {
 
   const resetMessageFields = () => {
     setMessageFields(defaultMessageFields)
+  }
+  const resetYtFields = () => {
+    setYtFields(defaultYTFields)
+    
   }
 
   const handleChange = (event) => {
@@ -86,10 +101,20 @@ const MusicRoom = () => {
     setYtFields({[name]: value})
   }
 
-  const ytSubmit = (event) => {
+  const ytSubmit = async(event) => {
     event.preventDefault()
-    console.log(yt_link)
+    // console.log(yt_link)
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    const match = yt_link.match(regExp);
+    const id = match && match[7].length == 11 ? match[7] : null 
+    console.log(id)
+    const vidPlayer = `https://www.youtube.com/embed/${id}?autoplay=1`
+    await setYtPlayer(vidPlayer)
+    socket.emit('send-yt-link', vidPlayer, roomKey)
+    resetYtFields()
   }
+
+  
 
   return (
     <div className='music-room-container'>
@@ -97,7 +122,9 @@ const MusicRoom = () => {
       <div className='content-wrapper'>
         <div className='music-queue'>MUSIC QUEUE</div>
         <div className='video-player'>VIDEO PLAYER
-        <iframe></iframe>       
+          {ytPlayer !== ''}{
+            <iframe src={ytPlayer} width='80%' height='70%' allow='autoplay' title='YT_TITLE'></iframe>       
+          }
         </div>
         <div className='message-container'>
           <div className='chatroom'>Chat Room</div>
