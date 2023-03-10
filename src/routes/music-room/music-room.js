@@ -19,6 +19,7 @@ const MusicRoom = () => {
   const [messageFields, setMessageFields] = useState(defaultMessageFields)
   const [ytFields, setYtFields] = useState(defaultYTFields)
   const {yt_link} = ytFields
+  const [ytVidId, setYtVidId] = useState('')
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
@@ -47,7 +48,6 @@ const MusicRoom = () => {
     const currentURL = window.location.pathname
     const parts = currentURL.split('/')
     const roomCode = parts[parts.length-1]
-    console.log(roomCode)
     setRoomKey(roomCode)
   }, [setRoomKey])
 
@@ -81,14 +81,47 @@ const MusicRoom = () => {
     }
   }
 
+  
   const ytChange = (event) => {
     const {name, value} = event.target
     setYtFields({[name]: value})
   }
 
-  const ytSubmit = (event) => {
+  const ytSubmit = async(event) => {
     event.preventDefault()
-    console.log(yt_link)
+    console.log("event", yt_link)
+    
+    // grabbing yt vid id
+    let findIdStart = false;
+    let vidId = ""
+    for(let i = 0; i < yt_link.length; i++) {
+      if(yt_link[i] === "v" && yt_link[i+1] === "=") {
+        i += 2;
+        findIdStart = true;
+      }
+      if (findIdStart === true && vidId.length <= 11) {
+        vidId += yt_link[i]
+      }
+    }
+
+    // if the link doesnt have "v="
+    let forwardSlashCounter = 0;
+    if(findIdStart === false) {
+      for(let i = 0; i < yt_link.length; i++) {
+        if(forwardSlashCounter === 3 && vidId.length <= 11) {
+          vidId += yt_link[i]
+        }
+        if(yt_link[i] === "/") {
+          forwardSlashCounter++;
+        }
+
+      }
+    }
+
+    // console.log(forwardSlashCounter)
+    // yt_link = vidId
+    await setYtVidId(vidId)
+    console.log("vid id:", vidId, "youtube Video id:", ytVidId)
   }
 
   return (
@@ -97,7 +130,7 @@ const MusicRoom = () => {
       <div className='content-wrapper'>
         <div className='music-queue'>MUSIC QUEUE</div>
         <div className='video-player'>VIDEO PLAYER
-        <iframe></iframe>       
+        <iframe width="560" height="315" src={`https://www.youtube.com/embed/${ytVidId}`} title="YouTube video player" frameBorder="0" allowFullScreen></iframe>       
         </div>
         <div className='message-container'>
           <div className='chatroom'>Chat Room</div>
