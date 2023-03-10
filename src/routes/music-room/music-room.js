@@ -20,6 +20,7 @@ const MusicRoom = () => {
   const [ytFields, setYtFields] = useState(defaultYTFields)
   const {yt_link} = ytFields
   const [ytVidId, setYtVidId] = useState('')
+  const youtubeRegex = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
@@ -89,39 +90,45 @@ const MusicRoom = () => {
 
   const ytSubmit = async(event) => {
     event.preventDefault()
-    console.log("event", yt_link)
-    
-    // grabbing yt vid id
-    let findIdStart = false;
-    let vidId = ""
-    for(let i = 0; i < yt_link.length; i++) {
-      if(yt_link[i] === "v" && yt_link[i+1] === "=") {
-        i += 2;
-        findIdStart = true;
-      }
-      if (findIdStart === true && vidId.length <= 11) {
-        vidId += yt_link[i]
-      }
-    }
+    const {name, value} = event.target
+    console.log("THIS IS THE NAME AND VALUE", name, value)
 
-    // if the link doesnt have "v="
-    let forwardSlashCounter = 0;
-    if(findIdStart === false) {
+    if(youtubeRegex.test(yt_link)) {
+      console.log("legit link bruh")
+      // grabbing yt vid id
+      let findIdStart = false;
+      let vidId = ""
       for(let i = 0; i < yt_link.length; i++) {
-        if(forwardSlashCounter === 3 && vidId.length <= 11) {
+        if(yt_link[i] === "v" && yt_link[i+1] === "=") {
+          i += 2;
+          findIdStart = true;
+        }
+        if (findIdStart === true && vidId.length <= 11) {
           vidId += yt_link[i]
         }
-        if(yt_link[i] === "/") {
-          forwardSlashCounter++;
-        }
-
       }
-    }
 
-    // console.log(forwardSlashCounter)
-    // yt_link = vidId
-    await setYtVidId(vidId)
-    console.log("vid id:", vidId, "youtube Video id:", ytVidId)
+      // if the link doesnt have "v="
+      let forwardSlashCounter = 0;
+      if(findIdStart === false) {
+        for(let i = 0; i < yt_link.length; i++) {
+          if(forwardSlashCounter === 3 && vidId.length <= 11) {
+            vidId += yt_link[i]
+          }
+          if(yt_link[i] === "/") {
+            forwardSlashCounter++;
+          }
+
+        }
+      }
+
+      await setYtVidId(vidId)
+      console.log("vid id:", vidId, "youtube Video id:", ytVidId)
+    }
+    else {
+      setYtFields({"yt_link": "Please input a Youtube Link"})
+    }
+    
   }
 
   return (
