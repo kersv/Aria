@@ -22,6 +22,8 @@ const MusicRoom = () => {
   const {yt_link} = ytFields
   const [ytPlayer, setYtPlayer] = useState('')
   const [videoTitle, setVideoTitle] = useState('')
+  const [videoQueue, setVideoQueue] = useState([])
+  const [titleQueue, setTitleQueue] = useState([])
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
@@ -57,21 +59,36 @@ const MusicRoom = () => {
   })
 
   socket.on('recieve-yt', (incomingYT) => {
-    setYtPlayer(incomingYT)
+    // setYtPlayer(incomingYT)
+    setVideoQueue([...videoQueue, incomingYT])
+    returnTitle(incomingYT)
   })
 
   useEffect(() => {  
-    setYtPlayer(ytPlayer)
-    getTitle(ytPlayer)
-    
-  }, [ytPlayer])
+    setYtPlayer(videoQueue[0])
+    getTitle(videoQueue[0])    
+  }, [videoQueue[0]])
 
   const getTitle = async(id) => {
     try{
       const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=snippet&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`)
       const data = await response.json()
       const title = data.items[0].snippet.title;
+      console.log(title)
       setVideoTitle(title)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  const returnTitle = async(id) => {
+    try{
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=snippet&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`)
+      const data = await response.json()
+      const title = data.items[0].snippet.title;
+      setTitleQueue([...titleQueue, title])
+      console.log('THIS IS THE RETURN TITLE', title)
     }
     catch(error){
       console.log(error)
@@ -141,14 +158,15 @@ const MusicRoom = () => {
     const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
     const match = yt_link.match(regExp);
     const id = match && match[7].length == 11 ? match[7] : null 
-    console.log(id)
-    // const vidPlayer = `https://www.youtube.com/embed/${id}?autoplay=1`
-    // await setYtPlayer(vidPlayer)
-    // socket.emit('send-yt-link', vidPlayer, roomKey)
-    await setYtPlayer(id)
+
+    await setVideoQueue([...videoQueue, id])
+    returnTitle(id)
+    // await setYtPlayer(videoQueue[0])
     socket.emit('send-yt-link', id, roomKey)
     resetYtFields()
   }
+
+
 
   const onReady = (event) => { 
     console.log('LOADED')
@@ -166,18 +184,31 @@ const MusicRoom = () => {
     playerRef.current.pauseVideo()
     socket.emit('send-video-status', msg, roomKey)
   }
+  const onEnd = (event) => {
+    console.log('ended')
+    setVideoQueue(prevQueue => prevQueue.slice(1))
+    setTitleQueue(prevTitle => prevTitle.slice(1))
+  }
   
 
   return (
     <div className='music-room-container'>
       <div className='room-key'>Room Key: {roomKey}</div>
       <div className='content-wrapper'>
-        <div className='music-queue'>MUSIC QUEUE</div>
+
+        <div className='music-queue'>
+          {
+            titleQueue.map((title, index) => (
+              <div key={index} className='video-title'> {title} </div>
+            ))
+          }
+        </div>
+
         <div className='video-player'>
           {ytPlayer !== ''}{
             <Fragment>
               <span className='video-title'>{videoTitle}</span>
-              <Youtube videoId={ytPlayer} opts={opts} onReady={onReady} onPlay={onPlay} onPause={onPause} style={{width: '90%', height:'80%'}}/>
+              <Youtube videoId={ytPlayer} opts={opts} onReady={onReady} onPlay={onPlay} onPause={onPause} onEnd={onEnd} style={{width: '90%', height:'80%'}}/>
             </Fragment>
           }
         </div>
