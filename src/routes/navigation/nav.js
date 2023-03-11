@@ -38,6 +38,7 @@ const Navigation = () => {
                         </div>
                         <div className = "logo-bottom-nav">Aria</div>
                     </Link>
+                    <Link className = "nav-link" to = "/room"> Room </Link>
                     <Link className = "nav-link" to = "/about"> About </Link>
                 </div>
                 <div className='nav-right'>

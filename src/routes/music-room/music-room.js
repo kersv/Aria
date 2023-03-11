@@ -1,6 +1,7 @@
-import { useRef, useContext, useState, useEffect} from 'react'
+import { useRef, useContext, useState, useEffect, Fragment} from 'react'
 import { RoomKeyContext } from '../../contexts/roomkey.context'
 import { UserContext } from '../../contexts/user.context'
+import Youtube from 'react-youtube'
 import './music-room.scss'
 import { io } from 'socket.io-client'
 
@@ -20,6 +21,7 @@ const MusicRoom = () => {
   const [ytFields, setYtFields] = useState(defaultYTFields)
   const {yt_link} = ytFields
   const [ytPlayer, setYtPlayer] = useState('')
+  const [videoTitle, setVideoTitle] = useState('')
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
@@ -28,6 +30,26 @@ const MusicRoom = () => {
 
   // this reference is for when the user types a new message and the chatbox is full, itll automatically show you the bottom
   const chatRef = useRef(null)
+  const playerRef = useRef(null)
+
+  const opts = {
+    width: '100%',
+    height: '100%', 
+    playerVars: {
+      autoplay: 1,
+    }
+  }
+
+  socket.on('recieve-video-status', (incomingStatus) => {
+    if(playerRef.current !== null && playerRef.current.getIframe() &&playerRef.current.getIframe().src){
+      if(incomingStatus === true){
+        playerRef.current.playVideo();
+      }
+      else{
+        playerRef.current.pauseVideo();
+      }
+    }
+  })
 
   socket.on('recieve-message', async(inComingMessage, inComingName) => {
     await setChatRoom([...chatroom,  [inComingMessage, inComingName]])
@@ -38,12 +60,23 @@ const MusicRoom = () => {
     setYtPlayer(incomingYT)
   })
 
-  useEffect(() => {
-    console.log(ytPlayer)
+  useEffect(() => {  
     setYtPlayer(ytPlayer)
+    getTitle(ytPlayer)
     
   }, [ytPlayer])
 
+  const getTitle = async(id) => {
+    try{
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=snippet&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`)
+      const data = await response.json()
+      const title = data.items[0].snippet.title;
+      setVideoTitle(title)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     if(currentUser){
@@ -109,12 +142,30 @@ const MusicRoom = () => {
     const match = yt_link.match(regExp);
     const id = match && match[7].length == 11 ? match[7] : null 
     console.log(id)
-    const vidPlayer = `https://www.youtube.com/embed/${id}?autoplay=1`
-    await setYtPlayer(vidPlayer)
-    socket.emit('send-yt-link', vidPlayer, roomKey)
+    // const vidPlayer = `https://www.youtube.com/embed/${id}?autoplay=1`
+    // await setYtPlayer(vidPlayer)
+    // socket.emit('send-yt-link', vidPlayer, roomKey)
+    await setYtPlayer(id)
+    socket.emit('send-yt-link', id, roomKey)
     resetYtFields()
   }
 
+  const onReady = (event) => { 
+    console.log('LOADED')
+    playerRef.current = event.target
+  }
+  const onPlay = (event) => {
+    console.log('PLAY')
+    const msg = true
+    playerRef.current.playVideo()
+    socket.emit('send-video-status', msg, roomKey)
+  }
+  const onPause = (event) => {
+    console.log('PAUSED')
+    const msg = false
+    playerRef.current.pauseVideo()
+    socket.emit('send-video-status', msg, roomKey)
+  }
   
 
   return (
@@ -122,9 +173,12 @@ const MusicRoom = () => {
       <div className='room-key'>Room Key: {roomKey}</div>
       <div className='content-wrapper'>
         <div className='music-queue'>MUSIC QUEUE</div>
-        <div className='video-player'>VIDEO PLAYER
+        <div className='video-player'>
           {ytPlayer !== ''}{
-            <iframe src={ytPlayer} width='80%' height='70%' allow='autoplay' title='YT_TITLE'></iframe>       
+            <Fragment>
+              <span className='video-title'>{videoTitle}</span>
+              <Youtube videoId={ytPlayer} opts={opts} onReady={onReady} onPlay={onPlay} onPause={onPause} style={{width: '90%', height:'80%'}}/>
+            </Fragment>
           }
         </div>
         <div className='message-container'>
@@ -137,17 +191,17 @@ const MusicRoom = () => {
           ))}</div>
             <form onSubmit={handleSubmit} className='message-form'>
               <input type='text' className='message-input' required onChange={handleChange} name='message' value={message}/>
-              <button type='submit' className='send-button'>Send</button>
+              <button type='submit' className='send-button'>Chat</button>
             </form>
         </div>
 
       </div>
-          <div>
-            <form onSubmit={ytSubmit} className='message-form'>
-              <input type='text' className='yt-input' required onChange={ytChange} name='yt_link' value={yt_link}/>
-              <button type='submit' className='send-button'>Send</button>
-            </form>
-          </div>
+      <div className='input-link-container'>
+        <form onSubmit={ytSubmit} className='yt-input-form'>
+          <input type='text' className='yt-input' required onChange={ytChange} name='yt_link' value={yt_link}/>
+          <button type='submit' className='send-yt-button'>Send Link</button>
+        </form>
+      </div>
 
     </div>
   )
