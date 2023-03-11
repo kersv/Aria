@@ -19,8 +19,7 @@ const MusicRoom = () => {
   const [messageFields, setMessageFields] = useState(defaultMessageFields)
   const [ytFields, setYtFields] = useState(defaultYTFields)
   const {yt_link} = ytFields
-  const [ytVidId, setYtVidId] = useState('')
-  const youtubeRegex = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+  const [ytPlayer, setYtPlayer] = useState('')
   const {message} = messageFields
   const [chatroom, setChatRoom] = useState([])
   // const [userroom, setUserRoom] = useState([])
@@ -34,6 +33,17 @@ const MusicRoom = () => {
     await setChatRoom([...chatroom,  [inComingMessage, inComingName]])
     await console.log("this is the chatroom", chatroom)
   })
+
+  socket.on('recieve-yt', (incomingYT) => {
+    setYtPlayer(incomingYT)
+  })
+
+  useEffect(() => {
+    console.log(ytPlayer)
+    setYtPlayer(ytPlayer)
+    
+  }, [ytPlayer])
+
 
   useEffect(() => {
     if(currentUser){
@@ -59,6 +69,10 @@ const MusicRoom = () => {
 
   const resetMessageFields = () => {
     setMessageFields(defaultMessageFields)
+  }
+  const resetYtFields = () => {
+    setYtFields(defaultYTFields)
+    
   }
 
   const handleChange = (event) => {
@@ -90,46 +104,18 @@ const MusicRoom = () => {
 
   const ytSubmit = async(event) => {
     event.preventDefault()
-    const {name, value} = event.target
-    console.log("THIS IS THE NAME AND VALUE", name, value)
-
-    if(youtubeRegex.test(yt_link)) {
-      console.log("legit link bruh")
-      // grabbing yt vid id
-      let findIdStart = false;
-      let vidId = ""
-      for(let i = 0; i < yt_link.length; i++) {
-        if(yt_link[i] === "v" && yt_link[i+1] === "=") {
-          i += 2;
-          findIdStart = true;
-        }
-        if (findIdStart === true && vidId.length <= 11) {
-          vidId += yt_link[i]
-        }
-      }
-
-      // if the link doesnt have "v="
-      let forwardSlashCounter = 0;
-      if(findIdStart === false) {
-        for(let i = 0; i < yt_link.length; i++) {
-          if(forwardSlashCounter === 3 && vidId.length <= 11) {
-            vidId += yt_link[i]
-          }
-          if(yt_link[i] === "/") {
-            forwardSlashCounter++;
-          }
-
-        }
-      }
-
-      await setYtVidId(vidId)
-      console.log("vid id:", vidId, "youtube Video id:", ytVidId)
-    }
-    else {
-      setYtFields({"yt_link": "Please input a Youtube Link"})
-    }
-    
+    // console.log(yt_link)
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    const match = yt_link.match(regExp);
+    const id = match && match[7].length == 11 ? match[7] : null 
+    console.log(id)
+    const vidPlayer = `https://www.youtube.com/embed/${id}?autoplay=1`
+    await setYtPlayer(vidPlayer)
+    socket.emit('send-yt-link', vidPlayer, roomKey)
+    resetYtFields()
   }
+
+  
 
   return (
     <div className='music-room-container'>
@@ -137,7 +123,9 @@ const MusicRoom = () => {
       <div className='content-wrapper'>
         <div className='music-queue'>MUSIC QUEUE</div>
         <div className='video-player'>VIDEO PLAYER
-        <iframe width="560" height="315" src={`https://www.youtube.com/embed/${ytVidId}`} title="YouTube video player" frameBorder="0" allowFullScreen></iframe>       
+          {ytPlayer !== ''}{
+            <iframe src={ytPlayer} width='80%' height='70%' allow='autoplay' title='YT_TITLE'></iframe>       
+          }
         </div>
         <div className='message-container'>
           <div className='chatroom'>Chat Room</div>
