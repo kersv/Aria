@@ -45,6 +45,11 @@
       justify-content: center;
       align-items: center;
       border: 1px solid black;
+
+      .video-title{
+        font-weight: bold;
+        font-size: 1em;
+      }
     }
     .message-container{
       flex: 1;
@@ -110,7 +115,7 @@
         .send-button{
           width: 30%;
           padding-top: 12px;
-          padding-bottom: 12px;
+          padding-bottom: 13px;
           background-color: #519E8A;
           border: none;
           cursor: pointer;
@@ -119,6 +124,42 @@
       }
     
     }
+  }
+
+  .input-link-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    
+    .yt-input-form{
+      width: 40%;
+      display: flex;
+      justify-content: center;
+      
+
+      .yt-input{
+        flex: 4;
+        padding: 10px 10px 10px 5px;
+        margin-right: 10px;
+        font-size: 18px;
+        color: grey;
+        
+        
+      }
+      .send-yt-button{
+        flex: 1;
+        padding: 10px;
+        cursor: pointer;
+        background-color: #519E8A;
+        border: none;
+        
+      }
+
+    }
+
+
   }
 
 }
