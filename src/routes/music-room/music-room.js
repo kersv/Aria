@@ -1,6 +1,7 @@
 import { useRef, useContext, useState, useEffect, Fragment} from 'react'
 import { RoomKeyContext } from '../../contexts/roomkey.context'
 import { UserContext } from '../../contexts/user.context'
+import FormInput from '../../components/form-input/form-input'
 import Youtube from 'react-youtube'
 import './music-room.scss'
 import { io } from 'socket.io-client'
@@ -197,11 +198,13 @@ const MusicRoom = () => {
       <div className='content-wrapper'>
 
         <div className='music-queue'>
+          
           {
             titleQueue.map((title, index) => (
               <div key={index} className='video-title'> {title} </div>
             ))
           }
+          
         </div>
 
         <div className='video-player'>
@@ -229,7 +232,7 @@ const MusicRoom = () => {
       </div>
       <div className='input-link-container'>
         <form onSubmit={ytSubmit} className='yt-input-form'>
-          <input type='text' className='yt-input' required onChange={ytChange} name='yt_link' value={yt_link}/>
+          <FormInput label='Youtube Link' type='text' className='yt-input' required onChange={ytChange} name='yt_link' value={yt_link}/>
           <button type='submit' className='send-yt-button'>Send Link</button>
         </form>
       </div>
