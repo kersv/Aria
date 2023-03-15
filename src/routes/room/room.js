@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import { RoomKeyContext } from '../../contexts/roomkey.context'
 
-const socket = io('http://localhost:3000')
+const socket = io('http://localhost:8000')
 socket.on("connect", ()=> {
     console.log("this is the socket id:", socket.id)
 })
